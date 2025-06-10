@@ -4,8 +4,8 @@ MODELOS = ['llama3-8b-8192', 'llama3-70b-8192','gemma2-9b-it']
 
 #Configurar paguina
 def configurar_pagina():
-    st.set_page_config(page_title="Boca", page_icon = "🗿")
-    st.title("Bienvenido a mi casa")
+    st.set_page_config(page_title="Proyecto Final", page_icon = "🗿")
+    st.title("Bienvenido sentite como en casa")
 
 #CREar un CLIENTE GROQ me permite conectar con api de groq aca el cliente somos nosotros
 def crear_cliente_groq(): #almacena los modelos de IA
