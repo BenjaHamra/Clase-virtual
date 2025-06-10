@@ -43,7 +43,14 @@ def mostrar_mensajes(role, content):
     with st.chat_message(role):
         st.markdown(content)
 
-#CREACION DEL MODELO DE GROQ 
+#llamar aL MODELO DE GROQ 
+def obtener_respuesta_modelo(cliente, modelo, mensaje): # obtengo el mensaje del cliente 
+    respuesta = cliente.chat.completions.create( # almaceno la respuesat del modelo
+        model = modelo,
+        messages = mensaje,
+        stream = False, # esto nos permite devolver el mensaje de una ves y no en partes
+    )
+    return respuesta.choices[0].message.content # me devuelve le mensaje de la posicion 0 del cliente
 
 
 #EJECUTAR FUNCIONES
@@ -51,12 +58,23 @@ def ejecutar_funciones():
     configurar_pagina()
     cliente = crear_cliente_groq()
     modelo = mostrar_sedebar()
-    print(modelo)
-    inicializar_estado_chat()    
-    mensajeusuario = obtener_mensaje_usuario()
-    print(mensajeusuario)
-    # obtener_mensajes_previos()    
+    # print(modelo) ca muestro el modelo elegido en la terminal
 
+    inicializar_estado_chat()    
+    mensaje_usuario = obtener_mensaje_usuario()
+    # print(mensaje_usuario) aca muestro el mensaje en la terminal
+
+    obtener_mensajes_previos()
+
+    if mensaje_usuario:
+        agregar_mensajes_previos("user", mensaje_usuario) #guardo el quein lo envia y que envia
+        mostrar_mensajes("user", mensaje_usuario) # aca muestro el mensaje en la interfas
+
+        respuesta_contenido = obtener_respuesta_modelo(cliente, modelo, st.session_state.mensajes)
+
+        agregar_mensajes_previos("assistant",respuesta_contenido)
+        mostrar_mensajes("assistant",respuesta_contenido)
+    
 #EJECUTAR LA APP 
 if __name__ == "__main__": #Condiciona al name que es una funcion de paiton que toma un valor string aca le estoy dando el valor del archivo principal llamado main
     ejecutar_funciones() #si el name es distinto a main no se ejecuta nada porque no estoy en el archivo principal
